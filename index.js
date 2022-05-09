@@ -17,7 +17,7 @@ function createMatrix(list) {
             matrix[subListIndex].push(list[i]);
         }
     }
-    console.log(matrix)
+    return matrix 
 }   
 
 function generateNumberSeq(seed) { 
@@ -28,7 +28,7 @@ function generateNumberSeq(seed) {
         currentGenNum = (currentGenNum / seed * 0.99 % 32) * 5000000
         result.push(Number(String(currentGenNum)[0]))
     }
-    createMatrix(result) 
+    return createMatrix(result) 
 }
 
 generateNumberSeq(58316);

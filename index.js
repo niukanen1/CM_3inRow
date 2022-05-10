@@ -34,7 +34,7 @@ const gameBoard = generateNumberSeq(58316).slice(0, 5);
 console.log(gameBoard);
 
 
-function checkCoords(x, y, direction, stepAmount = 1, result = {steps: [], value: false}) {
+function checkCoords(x, y, replaceVal, direction, stepAmount = 1, result = {steps: [], value: false}) {
     let x2 = x;
     let y2 = y;
     let step = stepAmount;
@@ -50,22 +50,21 @@ function checkCoords(x, y, direction, stepAmount = 1, result = {steps: [], value
         y2 += step;
     }
 
-    if ((gameBoard[y2] !== undefined && gameBoard[y2][x2] !== undefined) && gameBoard[y][x] == gameBoard[y2][x2]) { 
-        console.log(gameBoard[y][x] + " " + gameBoard[y2][x2])
+    if ((gameBoard[y2] !== undefined && gameBoard[y2][x2] !== undefined) && replaceVal == gameBoard[y2][x2]) { 
         result.value = true; 
         result.steps.push(step);
         step += 1
-        return checkCoords(x, y, directionKeyWord, step, result);
+        return checkCoords(x, y, replaceVal, directionKeyWord, step, result);
     }
 
     return result
 }
 
-function singleIntCheck(x, y) {
-    const right = checkCoords(x,y, "right"); 
-    const left = checkCoords(x,y, "left"); 
-    const top = checkCoords(x,y, "top"); 
-    const bottom = checkCoords(x,y, "bottom"); 
+function singleIntCheck(x, y, replaceVal) {
+    const right = checkCoords(x,y, replaceVal, "right"); 
+    const left = checkCoords(x,y, replaceVal, "left"); 
+    const top = checkCoords(x,y, replaceVal, "top"); 
+    const bottom = checkCoords(x,y, replaceVal, "bottom"); 
     
     if (right.value) {  
         console.log(`row: ${y}, coloumn ${x} is right ${right.steps}`)
@@ -84,7 +83,7 @@ function singleIntCheck(x, y) {
 
 for (let y = 0; y < gameBoard.length; y++) {
 	for (let x = 0; x < gameBoard[y].length; x++) {
-        singleIntCheck(x, y)
+        singleIntCheck(x, y, gameBoard[y][x+1])
     }
 }
 

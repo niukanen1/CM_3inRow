@@ -34,38 +34,77 @@ const gameBoard = generateNumberSeq(58316).slice(0, 5);
 console.log(gameBoard);
 
 
-function checkCoords(x, y, replaceVal, direction, stepAmount = 1, result = {steps: [], value: false}) {
+function getRelativeDirection(coord1, coord2) { 
+    const x1 = coord1.x
+    const y1 = coord1.y
+    const x2 = coord2.x
+    const y2 = coord2.y
+
+    if (x1 == x2 && y1 == y2) { 
+        return "equal"
+    }
+
+    if (y1 == y2) { 
+        if ((x1 - x2) < 0 ) { 
+            return "right"
+        } else { 
+            return "left"
+        }
+    } else if (x1 == x2) { 
+        if (y1 - y2 < 0) { 
+            return "bottom"
+        } else { 
+            return "top"
+        }
+    }
+}
+
+function checkCoords(x, y, replaceValCoords, direction, stepAmount = 1, result = {steps: [], value: false}) {
+    if (gameBoard[replaceValCoords.y] == undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
+        return result
+    }
     let x2 = x;
     let y2 = y;
     let step = stepAmount;
     let directionKeyWord = direction.toLowerCase();
+    const replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x]
+    const relativeDirection = getRelativeDirection({x: x, y: y}, replaceValCoords);
 
-    if (directionKeyWord == "right") { 
+    let sideLimit = replaceVal == gameBoard[y][x] ? "none" : relativeDirection; 
+
+    if (directionKeyWord == "right" && sideLimit != "right") { 
         x2 += step;
-    } else if (directionKeyWord == "left") { 
+    } else if (directionKeyWord == "left" && sideLimit != "left") { 
         x2 -= step;
-    } else if (directionKeyWord == "top") { 
+    } else if (directionKeyWord == "top" && sideLimit != "top") { 
         y2 -= step;
-    } else if (directionKeyWord == "bottom") { 
+    } else if (directionKeyWord == "bottom" && sideLimit != "bottom") { 
         y2 += step;
     }
 
     if ((gameBoard[y2] !== undefined && gameBoard[y2][x2] !== undefined) && replaceVal == gameBoard[y2][x2]) { 
-        result.value = true; 
+        result.value = true;
         result.steps.push(step);
         step += 1
-        return checkCoords(x, y, replaceVal, directionKeyWord, step, result);
+        return checkCoords(x, y, replaceValCoords, directionKeyWord, step, result);
     }
 
     return result
 }
 
-function singleIntCheck(x, y, replaceVal) {
-    const right = checkCoords(x,y, replaceVal, "right"); 
-    const left = checkCoords(x,y, replaceVal, "left"); 
-    const top = checkCoords(x,y, replaceVal, "top"); 
-    const bottom = checkCoords(x,y, replaceVal, "bottom"); 
-    
+
+
+function singleIntCheck(x, y, replaceValCoords) {
+    if (gameBoard[replaceValCoords.y] === undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
+        return 
+    }
+
+    // const replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x];
+    const right = checkCoords(x,y, replaceValCoords, "right"); 
+    const left = checkCoords(x,y, replaceValCoords, "left"); 
+    const top = checkCoords(x,y, replaceValCoords, "top"); 
+    const bottom = checkCoords(x,y, replaceValCoords, "bottom"); 
+
     if (right.value) {  
         console.log(`row: ${y}, coloumn ${x} is right ${right.steps}`)
     }
@@ -83,7 +122,7 @@ function singleIntCheck(x, y, replaceVal) {
 
 for (let y = 0; y < gameBoard.length; y++) {
 	for (let x = 0; x < gameBoard[y].length; x++) {
-        singleIntCheck(x, y, gameBoard[y][x+1])
+        singleIntCheck(x, y, {y: y, x: x+1})
     }
 }
 

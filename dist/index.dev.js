@@ -38,24 +38,60 @@ function generateNumberSeq(seed) {
 var gameBoard = generateNumberSeq(58316).slice(0, 5);
 console.log(gameBoard);
 
-function checkCoords(x, y, replaceVal, direction) {
+function getRelativeDirection(coord1, coord2) {
+  var x1 = coord1.x;
+  var y1 = coord1.y;
+  var x2 = coord2.x;
+  var y2 = coord2.y;
+
+  if (x1 == x2 && y1 == y2) {
+    return "equal";
+  }
+
+  if (y1 == y2) {
+    if (x1 - x2 < 0) {
+      return "right";
+    } else {
+      return "left";
+    }
+  } else if (x1 == x2) {
+    if (y1 - y2 < 0) {
+      return "bottom";
+    } else {
+      return "top";
+    }
+  }
+}
+
+function checkCoords(x, y, replaceValCoords, direction) {
   var stepAmount = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
   var result = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {
     steps: [],
     value: false
   };
+
+  if (gameBoard[replaceValCoords.y] == undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
+    return result;
+  }
+
   var x2 = x;
   var y2 = y;
   var step = stepAmount;
   var directionKeyWord = direction.toLowerCase();
+  var replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x];
+  var relativeDirection = getRelativeDirection({
+    x: x,
+    y: y
+  }, replaceValCoords);
+  var sideLimit = replaceVal == gameBoard[y][x] ? "none" : relativeDirection;
 
-  if (directionKeyWord == "right") {
+  if (directionKeyWord == "right" && sideLimit != "right") {
     x2 += step;
-  } else if (directionKeyWord == "left") {
+  } else if (directionKeyWord == "left" && sideLimit != "left") {
     x2 -= step;
-  } else if (directionKeyWord == "top") {
+  } else if (directionKeyWord == "top" && sideLimit != "top") {
     y2 -= step;
-  } else if (directionKeyWord == "bottom") {
+  } else if (directionKeyWord == "bottom" && sideLimit != "bottom") {
     y2 += step;
   }
 
@@ -63,17 +99,22 @@ function checkCoords(x, y, replaceVal, direction) {
     result.value = true;
     result.steps.push(step);
     step += 1;
-    return checkCoords(x, y, replaceVal, directionKeyWord, step, result);
+    return checkCoords(x, y, replaceValCoords, directionKeyWord, step, result);
   }
 
   return result;
 }
 
-function singleIntCheck(x, y, replaceVal) {
-  var right = checkCoords(x, y, replaceVal, "right");
-  var left = checkCoords(x, y, replaceVal, "left");
-  var top = checkCoords(x, y, replaceVal, "top");
-  var bottom = checkCoords(x, y, replaceVal, "bottom");
+function singleIntCheck(x, y, replaceValCoords) {
+  if (gameBoard[replaceValCoords.y] === undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
+    return;
+  } // const replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x];
+
+
+  var right = checkCoords(x, y, replaceValCoords, "right");
+  var left = checkCoords(x, y, replaceValCoords, "left");
+  var top = checkCoords(x, y, replaceValCoords, "top");
+  var bottom = checkCoords(x, y, replaceValCoords, "bottom");
 
   if (right.value) {
     console.log("row: ".concat(y, ", coloumn ").concat(x, " is right ").concat(right.steps));
@@ -96,7 +137,10 @@ function singleIntCheck(x, y, replaceVal) {
 
 for (var y = 0; y < gameBoard.length; y++) {
   for (var x = 0; x < gameBoard[y].length; x++) {
-    singleIntCheck(x, y, gameBoard[y][x + 1]);
+    singleIntCheck(x, y, {
+      y: y,
+      x: x + 1
+    });
   }
 } // for (let y = 0; y < gameBoard.length; y++){
 //     for (let x = 0; x < gameBoard[y].length; x++){

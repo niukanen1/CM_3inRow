@@ -2,6 +2,34 @@
 
 const GAME_FIELD_SIZE = 5;
 
+const fs = require('fs');
+let name = 0
+
+function CreateJsonFile(){
+    let dict = {
+        "matrix" : gameBoard,
+        "loading" : fullSeq
+    }
+    const dictstring = JSON.stringify(dict);
+
+    
+    fs.writeFileSync(`${name}.json`, dictstring)
+    name ++
+}
+
+function getMotherMatrix(){
+    name -= 1
+    if(name >= 0) {
+
+        gameBoard = fs.readFileSync(`${name}.json`)["matrix"]
+        fullSeq = fs.readFileSync(`${name}.json`)["loading"]
+        console.log(gameBoard)
+        return true
+    }else{
+        return false
+    }
+}
+
 function createVerMatrix(list) { 
     const matrix = [];
     let subListIndex = 0;
@@ -236,12 +264,14 @@ function gravity(){
     for(let line in gameBoard){
         for(let s in gameBoard[line]){
             if(gameBoard[line][s]==0){
+                CreateJsonFile()
                 changeLocation(line, s)
+                workWithMatrix()
                 console.log(`Chang loc for ${line} ${s}`)
             }
         }
     }
-    console.log(0 in gameBoard)
+    getMotherMatrix()
 }
 
 
@@ -287,13 +317,16 @@ let fullSeq = generateNumberSeq(58316).reverse();
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard
 
-for (let y = 0; y < gameBoard.length; y++) {
-    for (let x = 0; x < gameBoard[y].length; x++) {
-        console.log(`TAGRET::: y: ${y} x: ${x}`)
-        let check = singleIntCheck(x, y, {y: y, x: x}); 
-        if (!isUndefined(check)) { 
-            removeItemsByCoords(getCoordsToRm(check))
+function workWithMatrix(){
+    for (let y = 0; y < gameBoard.length; y++) {
+        for (let x = 0; x < gameBoard[y].length; x++) {
+            console.log(`TAGRET::: y: ${y} x: ${x}`)
+            let check = singleIntCheck(x, y, {y: y, x: x});
+            if (!isUndefined(check)) {
+                removeItemsByCoords(getCoordsToRm(check))
+            }
         }
     }
 }
 
+workWithMatrix()

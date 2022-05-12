@@ -17,6 +17,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28vehTxxs3mxcIwTphLgdn8ViPs" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -26,13 +27,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/petrt/PhpstormProjects/CM_3inRow/index.js",
+    "last_opened_file_path": "C:/Users/petrt/PhpstormProjects/CM_3inRow/VerMatrix_gravity.js",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
+    <configuration name="VerMatrix_gravity.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="VerMatrix_gravity.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
   </component>

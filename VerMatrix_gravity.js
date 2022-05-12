@@ -220,15 +220,44 @@ function getCoordsToRm(checkedIntObj) {
     return coordsToRemove
 }
 
-function removeItemsByCoords(sideCoords) { 
-    for (let side in sideCoords ) { 
-        // console.log(coords[side])
-        for (let coord of sideCoords[side]) { 
+function changeLocation(line, s){
+    if(line > 0){
+        gameBoard[line][s] =  gameBoard[line -1 ][s]
+        changeLocation(line-1, s)
+    }else{
+        
+        gameBoard[line][s] = fullSeq[s][0]
+        fullSeq[s].shift()
+    }
+}
+
+function gravity(){
+
+    for(let line in gameBoard){
+        for(let s in gameBoard[line]){
+            if(gameBoard[line][s]==0){
+                changeLocation(line, s)
+                console.log(`Chang loc for ${line} ${s}`)
+            }
+        }
+    }
+    console.log(0 in gameBoard)
+}
+
+
+function removeItemsByCoords(sideCoords) {
+    let isSomethigDel = false
+    for (let side in sideCoords ) {
+        for (let coord of sideCoords[side]) {
             console.log(coord)
             gameBoard[coord.y][coord.x] = 0
+            isSomethigDel = true
         }
         
-    } 
+    }
+    if(isSomethigDel){
+        gravity()
+    }
     console.log(gameBoard)
 }
 

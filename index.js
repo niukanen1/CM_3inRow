@@ -23,14 +23,16 @@ function generateNumberSeq(seed) {
 	let currentGenNum = seed;
 	const result = [];
 
+
+    // INT sequence 
 	for (let i = 0; i < 100; i++) {
 		currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
 		result.push(Number(String(currentGenNum)[0]));
 	}
 	return createMatrix(result);
 }
-
-const gameBoard = generateNumberSeq(58316).slice(0, 5);
+const fullSeq = generateNumberSeq(58316).reverse(); 
+const gameBoard = fullSeq.slice(fullSeq.length - 5 , fullSeq.length);
 console.log(gameBoard);
 
 
@@ -122,37 +124,6 @@ function singleIntCheck(x, y, replaceValCoords) {
 
 for (let y = 0; y < gameBoard.length; y++) {
 	for (let x = 0; x < gameBoard[y].length; x++) {
-        singleIntCheck(x, y, {y: y, x: x+1})
+        singleIntCheck(x, y, {y: y, x: x-1},)
     }
 }
-
-
-// for (let y = 0; y < gameBoard.length; y++){
-//     for (let x = 0; x < gameBoard[y].length; x++){
-//         console.log(`Checking for x:${x} y:${y} --- value: ${gameBoard[y][x]}`)
-
-//         let right = gameBoard[y] != undefined && gameBoard[y][x+2] !=undefined ? gameBoard[y][x+2] : "None"
-//         let bottom =  gameBoard[y+1] != undefined && gameBoard[y+1][x+1]!= undefined ?  gameBoard[y+1][x+1] : "None"
-//         let left = gameBoard[y] != undefined && gameBoard[y][x-2]!=undefined ? gameBoard[y][x-2] : "None"
-//         let top = gameBoard[y-1] != undefined && gameBoard[y-1][x-1]!=undefined ? gameBoard[y-1][x-1] : "None"
-//         console.log(`BOTTOM: ${bottom == gameBoard[y][x]}`)
-//         console.log(`TOP: ${top == gameBoard[y][x]}`)
-//         switch (gameBoard[y][x]){
-//             case right:
-//                 console.log("Match on the right")
-//                 break;
-//             case bottom:
-//                 console.log("Match on the bottom");
-//                 break;
-//             case left:
-//                 console.log("Match on the left")
-//                 break;
-//             case top:
-//                 console.log("Match on the top")
-//                 break;
-//         }
-//         console.log("===============");
-
-//     }
-
-//     }

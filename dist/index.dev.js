@@ -25,7 +25,7 @@ function createMatrix(list) {
 
 function generateNumberSeq(seed) {
   var currentGenNum = seed;
-  var result = [];
+  var result = []; // INT sequence 
 
   for (var i = 0; i < 100; i++) {
     currentGenNum = currentGenNum / seed * 0.99 % 32 * 5000000;
@@ -35,7 +35,8 @@ function generateNumberSeq(seed) {
   return createMatrix(result);
 }
 
-var gameBoard = generateNumberSeq(58316).slice(0, 5);
+var fullSeq = generateNumberSeq(58316).reverse();
+var gameBoard = fullSeq.slice(fullSeq.length - 5, fullSeq.length);
 console.log(gameBoard);
 
 function getRelativeDirection(coord1, coord2) {
@@ -63,9 +64,9 @@ function getRelativeDirection(coord1, coord2) {
   }
 }
 
-function checkCoords(x, y, replaceValCoords, direction) {
-  var stepAmount = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
-  var result = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {
+function checkCoords(x, y, replaceValCoords, direction, gameBoard) {
+  var stepAmount = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1;
+  var result = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : {
     steps: [],
     value: false
   };
@@ -105,7 +106,7 @@ function checkCoords(x, y, replaceValCoords, direction) {
   return result;
 }
 
-function singleIntCheck(x, y, replaceValCoords) {
+function singleIntCheck(x, y, replaceValCoords, gameBoard) {
   if (gameBoard[replaceValCoords.y] === undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
     return;
   } // const replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x];
@@ -139,32 +140,12 @@ for (var y = 0; y < gameBoard.length; y++) {
   for (var x = 0; x < gameBoard[y].length; x++) {
     singleIntCheck(x, y, {
       y: y,
-      x: x + 1
-    });
+      x: x - 1
+    }, gameBoard);
   }
-} // for (let y = 0; y < gameBoard.length; y++){
-//     for (let x = 0; x < gameBoard[y].length; x++){
-//         console.log(`Checking for x:${x} y:${y} --- value: ${gameBoard[y][x]}`)
-//         let right = gameBoard[y] != undefined && gameBoard[y][x+2] !=undefined ? gameBoard[y][x+2] : "None"
-//         let bottom =  gameBoard[y+1] != undefined && gameBoard[y+1][x+1]!= undefined ?  gameBoard[y+1][x+1] : "None"
-//         let left = gameBoard[y] != undefined && gameBoard[y][x-2]!=undefined ? gameBoard[y][x-2] : "None"
-//         let top = gameBoard[y-1] != undefined && gameBoard[y-1][x-1]!=undefined ? gameBoard[y-1][x-1] : "None"
-//         console.log(`BOTTOM: ${bottom == gameBoard[y][x]}`)
-//         console.log(`TOP: ${top == gameBoard[y][x]}`)
-//         switch (gameBoard[y][x]){
-//             case right:
-//                 console.log("Match on the right")
-//                 break;
-//             case bottom:
-//                 console.log("Match on the bottom");
-//                 break;
-//             case left:
-//                 console.log("Match on the left")
-//                 break;
-//             case top:
-//                 console.log("Match on the top")
-//                 break;
-//         }
-//         console.log("===============");
-//     }
-//     }
+}
+
+module.exports = {
+  generateNumberSeq: generateNumberSeq,
+  singleIntCheck: singleIntCheck
+};

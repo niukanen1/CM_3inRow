@@ -48,14 +48,14 @@ function generateNumberSeq(seed) {
 		currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
 		result.push(Number(String(currentGenNum)[0]));
 	}
-	createMatrix(result);
+
+    // can be changed to createVerMatrix(result) or createMatrix(result)
+	return createVerMatrix(result);
 }
 
-
-generateNumberSeq(58316);
-// const fullSeq = generateNumberSeq(58316).reverse(); 
-// const gameBoard = fullSeq.slice(fullSeq.length - 5 , fullSeq.length);
-
+const fullSeq = generateNumberSeq(58316).reverse(); 
+const gameBoard = fullSeq.slice(fullSeq.length - 5 , fullSeq.length);
+console.log(fullSeq)
 
 function getRelativeDirection(coord1, coord2) { 
     const x1 = coord1.x

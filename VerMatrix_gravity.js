@@ -157,11 +157,13 @@ function updateMatrix(fullList) {
 }
 
 
-const fullSeq = generateNumberSeq(58316).reverse(); 
-// console.log(fullSeq)
-console.log("NON CHANGED FULL:::: ")
-console.log(fullSeq)
-console.log("CHANGED FULL::::")
-console.log(updateMatrix(fullSeq).updatedFullList);
-console.log("GAMEBOARD")
-console.log(updateMatrix(fullSeq).updatedGameBoard);
+let fullSeq = generateNumberSeq(58316).reverse();
+
+fullSeq = updateMatrix(fullSeq).updatedFullList;
+let gameBoard = updateMatrix(fullSeq).updatedGameBoard
+
+for (let y = 0; y < gameBoard.length; y++) {
+    for (let x = 0; x < gameBoard[y].length; x++) {
+        singleIntCheck(x, y, {y: y, x: x-1},)
+    }
+}

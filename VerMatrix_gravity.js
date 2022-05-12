@@ -53,9 +53,6 @@ function generateNumberSeq(seed) {
 	return createVerMatrix(result);
 }
 
-const fullSeq = generateNumberSeq(58316).reverse(); 
-const gameBoard = fullSeq.slice(fullSeq.length - 5 , fullSeq.length);
-console.log(fullSeq)
 
 function getRelativeDirection(coord1, coord2) { 
     const x1 = coord1.x
@@ -143,8 +140,28 @@ function singleIntCheck(x, y, replaceValCoords) {
     console.log("========")
 }
 
-// for (let y = 0; y < gameBoard.length; y++) {
-// 	for (let x = 0; x < gameBoard[y].length; x++) {
-//         singleIntCheck(x, y, {y: y, x: x-1},)
-//     }
-// }
+function updateMatrix(fullList) {
+    let subListIndex = 0; 
+    let updatedFullList = [...fullList];
+    const GameBoard = [[],[],[],[],[]];
+    for (let i = 0; i < fullList.length; i++) {
+        for (let j = 0; j < 5; j++)  {
+            GameBoard[i].push(fullList[i][j]);
+            updatedFullList[i].shift()
+        }
+    }
+    return {
+        updatedGameBoard: GameBoard, 
+        updatedFullList: updatedFullList,
+    }
+}
+
+
+const fullSeq = generateNumberSeq(58316).reverse(); 
+// console.log(fullSeq)
+console.log("NON CHANGED FULL:::: ")
+console.log(fullSeq)
+console.log("CHANGED FULL::::")
+console.log(updateMatrix(fullSeq).updatedFullList);
+console.log("GAMEBOARD")
+console.log(updateMatrix(fullSeq).updatedGameBoard);

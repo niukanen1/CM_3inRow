@@ -53,7 +53,6 @@ function generateNumberSeq(seed) {
 	return createVerMatrix(result);
 }
 
-
 function getRelativeDirection(coord1, coord2) { 
     const x1 = coord1.x
     const y1 = coord1.y
@@ -117,27 +116,120 @@ function checkCoords(x, y, replaceValCoords, direction, stepAmount = 1, result =
 function singleIntCheck(x, y, replaceValCoords) {
     if (gameBoard[replaceValCoords.y] === undefined || gameBoard[replaceValCoords.y][replaceValCoords.x] == undefined) {
         return 
+        // `\nSKIPPED {y: ${replaceValCoords.y} x: ${replaceValCoords.x}} \n`
     }
 
     // const replaceVal = gameBoard[replaceValCoords.y][replaceValCoords.x];
     const right = checkCoords(x,y, replaceValCoords, "right"); 
     const left = checkCoords(x,y, replaceValCoords, "left"); 
     const top = checkCoords(x,y, replaceValCoords, "top"); 
-    const bottom = checkCoords(x,y, replaceValCoords, "bottom"); 
+    const bottom = checkCoords(x,y, replaceValCoords, "bottom");
 
-    if (right.value) {  
-        console.log(`row: ${y}, coloumn ${x} is right ${right.steps}`)
+    const result = { 
+        coords: { 
+            y: y,
+            x: x, 
+        }, 
+        checkedValue: gameBoard[replaceValCoords.y][replaceValCoords.x], 
+        collisions: { 
+            right: right, 
+            left: left, 
+            top: top, 
+            bottom: bottom
+        }
     }
-    if (top.value) { 
-        console.log(`row: ${y}, coloumn ${x} is top ${top.steps}`)
+
+    return result
+}
+
+
+function getCoordsToRm(checkedIntObj) { 
+    const coordsToRemove = {
+        right: [], 
+        left: [], 
+        top: [], 
+        bottom: [],
+        own: []
     }
-    if (bottom.value) { 
-        console.log(`row: ${y}, coloumn ${x} is bottom ${bottom.steps}`)
+    let stepsHor = 0; 
+    let stepsVer = 0; 
+    // console.log(`POS: y: ${checkedIntObj.coords.y}, x: ${checkedIntObj.coords.x}`)
+    // console.log("value: " + checkedIntObj.checkedValue);
+    // if (checkedIntObj.collisions.right.value || checkedIntObj.collisions.left.value || checkedIntObj.collisions.top.value || checkedIntObj.collisions.bottom.value) { 
+    //     // coordsToRemove.own.push({y: checkedIntObj.coords.y, x: checkedIntObj.coords.x})
+    // }
+    
+    for (let side in checkedIntObj.collisions) { 
+ 
+        // console.log("side : " + side); 
+        for (let step of checkedIntObj.collisions[side].steps) { 
+            if (side == "top" || side == "bottom") { 
+                    stepsVer++
+            }
+            if (side == "right" || side == "left") { 
+                stepsHor++; 
+            }
+            // console.log(checkedIntObj.collisions[side].steps.length)
+            // console.log("steps : " + step)
+            switch (side) { 
+                case "right" : 
+                    coordsToRemove[side].push({y: checkedIntObj.coords.y , x: checkedIntObj.coords.x + step})
+                    break
+                case "left": 
+                    coordsToRemove[side].push({y: checkedIntObj.coords.y , x: checkedIntObj.coords.x - step})
+                    break
+                case "top" : 
+                    coordsToRemove[side].push({y: checkedIntObj.coords.y - step , x: checkedIntObj.coords.x})
+                    break
+                case "bottom" : 
+                    coordsToRemove[side].push({y: checkedIntObj.coords.y + step , x: checkedIntObj.coords.x})
+                    break
+            } 
+
+        }
+        
     }
-    if (left.value) { 
-        console.log(`row: ${y}, coloumn ${x} is left ${left.steps}`)
+    if (stepsHor >= 2 || stepsVer >= 2) { 
+        coordsToRemove.own.push({y: checkedIntObj.coords.y, x: checkedIntObj.coords.x})
     }
-    console.log("========")
+
+    if (stepsHor >= 2 && stepsVer < 2) { 
+        coordsToRemove.bottom = [];
+        coordsToRemove.top = [];
+    }
+    if (stepsVer >= 2 && stepsHor < 2) { 
+        coordsToRemove.left = [];
+        coordsToRemove.right = [];
+    } 
+    if (stepsVer < 2) { 
+        coordsToRemove.top = []; 
+        coordsToRemove.bottom = [];
+    } 
+    if (stepsHor < 2) { 
+        coordsToRemove.left = []; 
+        coordsToRemove.right = [];
+    } 
+
+    // console.log("\n============")
+    // console.log(checkedIntObj.coords)
+    // console.log("Value: " + checkedIntObj.checkedValue)
+    console.log("Ver steps " + stepsVer); 
+    console.log("Hor steps " + stepsHor);
+    console.log(coordsToRemove)
+    // console.log("============\n")
+    return coordsToRemove
+}
+
+function removeItemsByCoords(sideCoords) { 
+    for (let side in sideCoords ) { 
+        // console.log(coords[side])
+        for (let coord of sideCoords[side]) { 
+            console.log(coord)
+            gameBoard[coord.y][coord.x] = 0
+        }
+        
+    } 
+    console.log(gameBoard)
 }
 
 function updateMatrix(fullList) {
@@ -156,6 +248,10 @@ function updateMatrix(fullList) {
     }
 }
 
+function isUndefined(toCheck) { 
+    return toCheck === undefined; 
+}  
+
 
 let fullSeq = generateNumberSeq(58316).reverse();
 
@@ -164,6 +260,11 @@ let gameBoard = updateMatrix(fullSeq).updatedGameBoard
 
 for (let y = 0; y < gameBoard.length; y++) {
     for (let x = 0; x < gameBoard[y].length; x++) {
-        singleIntCheck(x, y, {y: y, x: x-1},)
+        console.log(`TAGRET::: y: ${y} x: ${x}`)
+        let check = singleIntCheck(x, y, {y: y, x: x}); 
+        if (!isUndefined(check)) { 
+            removeItemsByCoords(getCoordsToRm(check))
+        }
     }
 }
+

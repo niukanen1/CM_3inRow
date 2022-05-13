@@ -4,10 +4,9 @@
     <list default="true" id="dd66044f-ce94-4c9c-906d-b584acfca581" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/3.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/VerMatrix_gravity.js" beforeDir="false" afterPath="$PROJECT_DIR$/VerMatrix_gravity.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gravity.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +52,7 @@
       <option name="presentableId" value="Default" />
       <updated>1652101606264</updated>
       <workItem from="1652101607737" duration="3790000" />
-      <workItem from="1652388749040" duration="8305000" />
+      <workItem from="1652388749040" duration="10030000" />
     </task>
     <servers />
   </component>
@@ -65,9 +64,9 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/VerMatrix_gravity.js</url>
-          <line>331</line>
+          <line>76</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

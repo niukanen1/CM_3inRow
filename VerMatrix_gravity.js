@@ -14,7 +14,7 @@ function CreateJsonFile(){
     const dictstring = JSON.stringify(dict);
 
     
-    fs.writeFileSync(`${name}.json`, dictstring)
+    fs.writeFileSync(`matrixes/${name}.json`, dictstring)
     name ++
 }
 
@@ -22,8 +22,8 @@ function getMotherMatrix(){
     name -= 1
     if(name >= 0) {
 
-        gameBoard = JSON.parse(fs.readFileSync(`${name}.json`))["matrix"]
-        fullSeq = JSON.parse(fs.readFileSync(`${name}.json`))["loading"]
+        gameBoard = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["matrix"]
+        fullSeq = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["loading"]
         //console.log(gameBoard)
         return true
     }else{
@@ -75,7 +75,13 @@ function generateNumberSeq(seed) {
     // INT sequence 
 	for (let i = 0; i < 100; i++) {
 		currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
-		result.push(Number(String(currentGenNum)[0]));
+        let num = Number(String(currentGenNum)[0])
+        if(num > 5){
+            result.push(parseInt(num/2));
+        }else{
+            result.push(num);
+        }
+
 	}
 
     // can be changed to createVerMatrix(result) or createMatrix(result)
@@ -321,7 +327,7 @@ let fullSeq = generateNumberSeq(58316).reverse();
 
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard
-let previos_Matrix =[...gameBoard]
+let previos_Matrix = [...gameBoard]
 
 function workWithMatrix(){
     for (let y = 0; y < gameBoard.length; y++) {
@@ -333,6 +339,7 @@ function workWithMatrix(){
             }
         }
     }
-}
+
+    }
 
 workWithMatrix()

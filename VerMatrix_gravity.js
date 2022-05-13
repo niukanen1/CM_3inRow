@@ -5,9 +5,10 @@ const GAME_FIELD_SIZE = 5;
 const fs = require('fs');
 let name = 0
 
+
 function CreateJsonFile(){
     let dict = {
-        "matrix" : gameBoard,
+        "matrix" : previos_Matrix, //gameBoard,
         "loading" : fullSeq
     }
     const dictstring = JSON.stringify(dict);
@@ -21,9 +22,9 @@ function getMotherMatrix(){
     name -= 1
     if(name >= 0) {
 
-        gameBoard = fs.readFileSync(`${name}.json`)["matrix"]
-        fullSeq = fs.readFileSync(`${name}.json`)["loading"]
-        console.log(gameBoard)
+        gameBoard = JSON.parse(fs.readFileSync(`${name}.json`))["matrix"]
+        fullSeq = JSON.parse(fs.readFileSync(`${name}.json`))["loading"]
+        //console.log(gameBoard)
         return true
     }else{
         return false
@@ -241,9 +242,9 @@ function getCoordsToRm(checkedIntObj) {
     // console.log("\n============")
     // console.log(checkedIntObj.coords)
     // console.log("Value: " + checkedIntObj.checkedValue)
-    console.log("Ver steps " + stepsVer); 
-    console.log("Hor steps " + stepsHor);
-    console.log(coordsToRemove)
+    //console.log("Ver steps " + stepsVer);
+    //console.log("Hor steps " + stepsHor);
+    //console.log(coordsToRemove)
     // console.log("============\n")
     return coordsToRemove
 }
@@ -264,14 +265,13 @@ function gravity(){
     for(let line in gameBoard){
         for(let s in gameBoard[line]){
             if(gameBoard[line][s]==0){
-                CreateJsonFile()
                 changeLocation(line, s)
-                workWithMatrix()
-                console.log(`Chang loc for ${line} ${s}`)
+                //console.log(`Chang loc for ${line} ${s}`)
             }
         }
     }
-    getMotherMatrix()
+
+    workWithMatrix()
 }
 
 
@@ -279,16 +279,21 @@ function removeItemsByCoords(sideCoords) {
     let isSomethigDel = false
     for (let side in sideCoords ) {
         for (let coord of sideCoords[side]) {
-            console.log(coord)
+            //console.log(coord)
+
             gameBoard[coord.y][coord.x] = 0
             isSomethigDel = true
         }
         
     }
     if(isSomethigDel){
+        console.log(previos_Matrix)
+        CreateJsonFile()
         gravity()
+        previos_Matrix = [...gameBoard]
+        getMotherMatrix()
     }
-    console.log(gameBoard)
+    //console.log(gameBoard)
 }
 
 function updateMatrix(fullList) {
@@ -311,16 +316,17 @@ function isUndefined(toCheck) {
     return toCheck === undefined; 
 }  
 
-
+//58316
 let fullSeq = generateNumberSeq(58316).reverse();
 
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard
+let previos_Matrix =[...gameBoard]
 
 function workWithMatrix(){
     for (let y = 0; y < gameBoard.length; y++) {
         for (let x = 0; x < gameBoard[y].length; x++) {
-            console.log(`TAGRET::: y: ${y} x: ${x}`)
+            //console.log(`TAGRET::: y: ${y} x: ${x}`)
             let check = singleIntCheck(x, y, {y: y, x: x});
             if (!isUndefined(check)) {
                 removeItemsByCoords(getCoordsToRm(check))

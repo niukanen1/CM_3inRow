@@ -1,13 +1,16 @@
+// PARAMETERS
+const GAME_FIELD_SIZE = 5;
+
 const { gravity } = require('./gravity');
 
 const N = 10
 const M = 40
-let  P = 0
+
+let points = 0
 let wins = 0
 let loses = 0
-// PARAMETERS
 
-const GAME_FIELD_SIZE = 5;
+
 
 const fs = require("fs");
 let name = 0;
@@ -16,7 +19,7 @@ function CreateJsonFile() {
 	let dict = {
 		matrix: previos_Matrix, //gameBoard,
 		loading: fullSeq,
-		points: P
+		points: points
 	};
 	const dictstring = JSON.stringify(dict);
 
@@ -29,7 +32,7 @@ function getMotherMatrix() {
 	if (name >= 0) {
 		gameBoard = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["matrix"];
 		fullSeq = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["loading"];
-		P = Number(JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["points"])
+		points = Number(JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["points"])
 		//console.log(gameBoard)
 		return true;
 	} else {
@@ -44,6 +47,7 @@ function createVerMatrix(list) {
 	for (let i = 0; i < GAME_FIELD_SIZE; i++) {
 		matrix.push([]);
 	}
+
 	for (let i = 0; i < list.length; i++) {
 		if (subListIndex < GAME_FIELD_SIZE) {
 			matrix[subListIndex].push(list[i]);
@@ -56,22 +60,6 @@ function createVerMatrix(list) {
 	}
 	return matrix;
 }
-function createMatrix(list) {
-	const matrix = [];
-	let subListIndex = 0;
-	for (let i = 0; i < list.length; i++) {
-		if (i != 0 && i % GAME_FIELD_SIZE == 0) {
-			subListIndex++;
-		}
-		if (i == 0 || i % GAME_FIELD_SIZE == 0) {
-			matrix[subListIndex] = [];
-			matrix[subListIndex].push(list[i]);
-		} else {
-			matrix[subListIndex].push(list[i]);
-		}
-	}
-	return matrix;
-}
 
 function generateNumberSeq(seed) {
 	let currentGenNum = seed;
@@ -79,10 +67,12 @@ function generateNumberSeq(seed) {
 
 	// INT sequence
 	for (let i = 0; i < 1000; i++) {
-		currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
-		let num = Number(String(currentGenNum)[0]);
-		if (num > 5) {
-			result.push(parseInt(num / 2));
+		// currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
+        currentGenNum = ((Math.cos(currentGenNum) - GAME_FIELD_SIZE) * 1000) / (GAME_FIELD_SIZE * 10 );
+        
+		let num = Number(String(currentGenNum)[5]);
+		if (num > GAME_FIELD_SIZE) {
+		    result.push(parseInt( Math.abs(num - GAME_FIELD_SIZE)));
 		} else {
 			result.push(num);
 		}
@@ -293,7 +283,7 @@ function removeItemsByCoords(sideCoords) {
 
 	for (let side in sideCoords) {
 		for (let coord of sideCoords[side]) {
-			P += 1
+			points += 1
 			gameBoard[coord.y][coord.x] = 0;
 			isSomethigDel = true;
 		}
@@ -313,9 +303,14 @@ function removeItemsByCoords(sideCoords) {
 
 function updateMatrix(fullList) {
 	let updatedFullList = [...fullList];
-	const GameBoard = [[], [], [], [], []];
+    const GameBoard = [];
+
+    for (let i = 0; i < GAME_FIELD_SIZE; i++) { 
+        GameBoard.push([]);
+    }
+
 	for (let i = 0; i < fullList.length; i++) {
-		for (let j = 0; j < 5; j++) {
+		for (let j = 0; j < GAME_FIELD_SIZE; j++) {
 			GameBoard[i].push(fullList[i][j]);
 			updatedFullList[i].shift();
 		}
@@ -364,15 +359,16 @@ function mainAction(x, y) {
     }
 } 
 
-//58316
-let fullSeq = generateNumberSeq(74610).reverse();
+// 58316
+// 74610
+let fullSeq = generateNumberSeq(58316).reverse();
 
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard;
 let previos_Matrix = [...gameBoard];
 
 function workWithMatrix() {
-	if (P > M && name <= N){
+	if (points > M && name <= N){
 		wins += 1
 		return
 	}

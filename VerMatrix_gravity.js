@@ -1,6 +1,10 @@
 const { gravity } = require('./gravity');
 
-
+const N = 10
+const M = 40
+let  P = 0
+let wins = 0
+let loses = 0
 // PARAMETERS
 
 const GAME_FIELD_SIZE = 5;
@@ -12,6 +16,7 @@ function CreateJsonFile() {
 	let dict = {
 		matrix: previos_Matrix, //gameBoard,
 		loading: fullSeq,
+		points: P
 	};
 	const dictstring = JSON.stringify(dict);
 
@@ -24,6 +29,7 @@ function getMotherMatrix() {
 	if (name >= 0) {
 		gameBoard = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["matrix"];
 		fullSeq = JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["loading"];
+		P = Number(JSON.parse(fs.readFileSync(`matrixes/${name}.json`))["points"])
 		//console.log(gameBoard)
 		return true;
 	} else {
@@ -72,7 +78,7 @@ function generateNumberSeq(seed) {
 	const result = [];
 
 	// INT sequence
-	for (let i = 0; i < 100; i++) {
+	for (let i = 0; i < 1000; i++) {
 		currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
 		let num = Number(String(currentGenNum)[0]);
 		if (num > 5) {
@@ -284,22 +290,25 @@ function getCoordsToRm(checkedIntObj) {
 
 function removeItemsByCoords(sideCoords) {
 	let isSomethigDel = false;
+
 	for (let side in sideCoords) {
 		for (let coord of sideCoords[side]) {
+			P += 1
 			gameBoard[coord.y][coord.x] = 0;
 			isSomethigDel = true;
 		}
 	}
     
 	if (isSomethigDel) {
-		console.log(previos_Matrix);
 		CreateJsonFile();
 		gravity(gameBoard, fullSeq);
+		console.log(gameBoard);
+		//console.log(fullSeq);
         workWithMatrix();
 		previos_Matrix = [...gameBoard];
 		getMotherMatrix();
 	}
-    
+
 }
 
 function updateMatrix(fullList) {
@@ -356,13 +365,21 @@ function mainAction(x, y) {
 } 
 
 //58316
-let fullSeq = generateNumberSeq(53487).reverse();
+let fullSeq = generateNumberSeq(74610).reverse();
 
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard;
 let previos_Matrix = [...gameBoard];
 
 function workWithMatrix() {
+	if (P > M && name <= N){
+		wins += 1
+		return
+	}
+	else if (name > N) {
+		loses += 1
+		return
+	}
 	for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
             mainAction(x, y)
@@ -370,3 +387,5 @@ function workWithMatrix() {
 	}
 }
 workWithMatrix();
+console.log(wins)
+console.log(loses)

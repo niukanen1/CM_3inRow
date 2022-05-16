@@ -1,3 +1,6 @@
+const { gravity } = require('./gravity');
+
+
 // PARAMETERS
 
 const GAME_FIELD_SIZE = 5;
@@ -279,27 +282,6 @@ function getCoordsToRm(checkedIntObj) {
 	return coordsToRemove;
 }
 
-function changeLocation(line, s) {
-	if (line > 0) {
-		gameBoard[line][s] = gameBoard[line - 1][s];
-		changeLocation(line - 1, s);
-	} else {
-		gameBoard[line][s] = fullSeq[s][0];
-		fullSeq[s].shift();
-	}
-}
-
-function gravity() {
-	for (let line in gameBoard) {
-		for (let s in gameBoard[line]) {
-			if (gameBoard[line][s] == 0) {
-				changeLocation(line, s);
-			}
-		}
-	}
-	workWithMatrix();
-}
-
 function removeItemsByCoords(sideCoords) {
 	let isSomethigDel = false;
 	for (let side in sideCoords) {
@@ -308,17 +290,19 @@ function removeItemsByCoords(sideCoords) {
 			isSomethigDel = true;
 		}
 	}
+    
 	if (isSomethigDel) {
 		console.log(previos_Matrix);
 		CreateJsonFile();
-		gravity();
+		gravity(gameBoard, fullSeq);
+        workWithMatrix();
 		previos_Matrix = [...gameBoard];
 		getMotherMatrix();
 	}
+    
 }
 
 function updateMatrix(fullList) {
-	let subListIndex = 0;
 	let updatedFullList = [...fullList];
 	const GameBoard = [[], [], [], [], []];
 	for (let i = 0; i < fullList.length; i++) {
@@ -346,15 +330,23 @@ function mainAction(x, y) {
             case 0: 
                 stepX = -1; 
                 stepY = 0;
+                break
             case 1: 
                 stepX = 1;
                 stepY = 0;
+                break
             case 2: 
                 stepX = 0;
                 stepY = 1;
+                break
             case 3: 
                 stepX = 0; 
                 stepY = -1;
+                break
+            case 4:
+                stepX = 0;
+                stepY = 0;
+                break
         }
         let check = singleIntCheck(x, y, { y: y+stepY, x: x+stepX });
         if (!isUndefined(check)) {
@@ -364,7 +356,7 @@ function mainAction(x, y) {
 } 
 
 //58316
-let fullSeq = generateNumberSeq(58316).reverse();
+let fullSeq = generateNumberSeq(53487).reverse();
 
 fullSeq = updateMatrix(fullSeq).updatedFullList;
 let gameBoard = updateMatrix(fullSeq).updatedGameBoard;

@@ -1,5 +1,5 @@
 // PARAMETERS
-const GAME_FIELD_SIZE = 5;
+const GAME_FIELD_SIZE = Number(process.argv.slice(2)[1]);
 
 const { gravity } = require('./gravity');
 
@@ -11,9 +11,27 @@ let wins = 0
 let loses = 0
 
 
+let winRate = {}
+for (let i = 0; i <= N; i++) {
+	winRate[i] = 0
+}
+
+
 
 const fs = require("fs");
 let name = 0;
+//58316
+const seed = Number(process.argv.slice(2)[0])
+
+
+let fullSeq = generateNumberSeq(seed).reverse();
+
+fullSeq = updateMatrix(fullSeq).updatedFullList;
+let gameBoard = updateMatrix(fullSeq).updatedGameBoard;
+let previos_Matrix = [...gameBoard];
+
+
+
 
 function CreateJsonFile() {
 	let dict = {
@@ -292,7 +310,7 @@ function removeItemsByCoords(sideCoords) {
 	if (isSomethigDel) {
 		CreateJsonFile();
 		gravity(gameBoard, fullSeq);
-		console.log(gameBoard);
+		//console.log(gameBoard);
 		//console.log(fullSeq);
         workWithMatrix();
 		previos_Matrix = [...gameBoard];
@@ -361,14 +379,10 @@ function mainAction(x, y) {
 
 // 58316
 // 74610
-let fullSeq = generateNumberSeq(58316).reverse();
-
-fullSeq = updateMatrix(fullSeq).updatedFullList;
-let gameBoard = updateMatrix(fullSeq).updatedGameBoard;
-let previos_Matrix = [...gameBoard];
 
 function workWithMatrix() {
 	if (points > M && name <= N){
+		winRate[name] += 1
 		wins += 1
 		return
 	}
@@ -383,5 +397,6 @@ function workWithMatrix() {
 	}
 }
 workWithMatrix();
-console.log(wins)
-console.log(loses)
+//console.log(wins)
+//console.log(loses)
+console.table(winRate)

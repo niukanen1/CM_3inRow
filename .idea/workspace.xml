@@ -51,22 +51,11 @@
       <updated>1652101606264</updated>
       <workItem from="1652101607737" duration="3790000" />
       <workItem from="1652388749040" duration="10030000" />
-      <workItem from="1652777801208" duration="1318000" />
+      <workItem from="1652777801208" duration="2799000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/VerMatrix_gravity.js</url>
-          <line>331</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

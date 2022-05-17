@@ -308,13 +308,15 @@ function removeItemsByCoords(sideCoords) {
 	}
     
 	if (isSomethigDel) {
+
 		CreateJsonFile();
+
 		gravity(gameBoard, fullSeq);
-		//console.log(gameBoard);
-		//console.log(fullSeq);
+		workWithMatrix(false)
         workWithMatrix();
 		previos_Matrix = [...gameBoard];
 		getMotherMatrix();
+		
 	}
 
 }
@@ -344,10 +346,10 @@ function isUndefined(toCheck) {
 }
 
 
-function mainAction(x, y) { 
+function mainAction(x, y) {
     let stepX = 0; 
     let stepY = 0
-    for (let i = 0; i < 4; i++) { 
+    for (let i = 0; i <= 4; i++) {
         switch (i) { 
             case 0: 
                 stepX = -1; 

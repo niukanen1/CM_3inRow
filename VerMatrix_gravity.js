@@ -425,3 +425,4 @@ workWithMatrix();
 //console.log(wins)
 //console.log(loses)
 console.table(winRate)
+

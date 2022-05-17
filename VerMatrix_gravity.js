@@ -349,7 +349,7 @@ function isUndefined(toCheck) {
 function mainAction(x, y) {
     let stepX = 0; 
     let stepY = 0
-    for (let i = 0; i <= 4; i++) {
+    for (let i = 0; i < 4; i++) {
         switch (i) { 
             case 0: 
                 stepX = -1; 
@@ -367,10 +367,6 @@ function mainAction(x, y) {
                 stepX = 0; 
                 stepY = -1;
                 break
-            case 4:
-                stepX = 0;
-                stepY = 0;
-                break
         }
         let check = singleIntCheck(x, y, { y: y+stepY, x: x+stepX });
         if (!isUndefined(check)) {
@@ -378,6 +374,32 @@ function mainAction(x, y) {
         }
     }
 } 
+
+function NoShiftChange(x, y) { 
+    let check = singleIntCheck(x, y, {y: y, x: x}); 
+    if (!isUndefined(check)) { 
+        if (NOSHIFTcoordRM(getCoordsToRm(check))) {
+            NoShiftChange()
+        }
+    }
+}
+
+
+function NOSHIFTcoordRM(sideCoords) {
+    let isSomeToRM = false 
+	for (let side in sideCoords) {
+		for (let coord of sideCoords[side]) {
+			points += 1
+			gameBoard[coord.y][coord.x] = 0;
+            isSomeToRM = true;
+		}
+	}
+    if (isSomeToRM) { 
+        gravity(gameBoard, fullSeq);
+        return true 
+    }
+    return false 
+}
 
 // 58316
 // 74610
@@ -394,6 +416,7 @@ function workWithMatrix() {
 	}
 	for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
+            NoShiftChange(x, y)
             mainAction(x, y)
 		}
 	}

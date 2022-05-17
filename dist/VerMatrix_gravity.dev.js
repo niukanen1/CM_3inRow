@@ -9,7 +9,7 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // PARAMETERS
-var GAME_FIELD_SIZE = 5;
+var GAME_FIELD_SIZE = Number(process.argv.slice(2)[1]);
 
 var _require = require('./gravity'),
     gravity = _require.gravity;
@@ -19,10 +19,22 @@ var M = 40;
 var points = 0;
 var wins = 0;
 var loses = 0;
+var winRate = {};
+
+for (var i = 0; i <= N; i++) {
+  winRate[i] = 0;
+}
 
 var fs = require("fs");
 
-var name = 0;
+var name = 0; //58316
+
+var seed = Number(process.argv.slice(2)[0]);
+var fullSeq = generateNumberSeq(seed).reverse();
+fullSeq = updateMatrix(fullSeq).updatedFullList;
+var gameBoard = updateMatrix(fullSeq).updatedGameBoard;
+
+var previos_Matrix = _toConsumableArray(gameBoard);
 
 function CreateJsonFile() {
   var dict = {
@@ -54,16 +66,16 @@ function createVerMatrix(list) {
   var matrix = [];
   var subListIndex = 0;
 
-  for (var i = 0; i < GAME_FIELD_SIZE; i++) {
+  for (var _i = 0; _i < GAME_FIELD_SIZE; _i++) {
     matrix.push([]);
   }
 
-  for (var _i = 0; _i < list.length; _i++) {
+  for (var _i2 = 0; _i2 < list.length; _i2++) {
     if (subListIndex < GAME_FIELD_SIZE) {
-      matrix[subListIndex].push(list[_i]);
+      matrix[subListIndex].push(list[_i2]);
     }
 
-    if (_i % GAME_FIELD_SIZE == 0 && subListIndex < GAME_FIELD_SIZE) {
+    if (_i2 % GAME_FIELD_SIZE == 0 && subListIndex < GAME_FIELD_SIZE) {
       subListIndex++;
     } else if (subListIndex >= GAME_FIELD_SIZE) {
       subListIndex = 0;
@@ -77,7 +89,7 @@ function generateNumberSeq(seed) {
   var currentGenNum = seed;
   var result = []; // INT sequence
 
-  for (var i = 0; i < 1000; i++) {
+  for (var _i3 = 0; _i3 < 1000; _i3++) {
     // currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
     currentGenNum = (Math.cos(currentGenNum) - GAME_FIELD_SIZE) * 1000 / (GAME_FIELD_SIZE * 10);
     var num = Number(String(currentGenNum)[5]);
@@ -338,8 +350,7 @@ function removeItemsByCoords(sideCoords) {
   if (isSomethigDel) {
     CreateJsonFile();
     gravity(gameBoard, fullSeq);
-    console.log(gameBoard); //console.log(fullSeq);
-
+    workWithMatrix(false);
     workWithMatrix();
     previos_Matrix = _toConsumableArray(gameBoard);
     getMotherMatrix();
@@ -351,15 +362,15 @@ function updateMatrix(fullList) {
 
   var GameBoard = [];
 
-  for (var i = 0; i < GAME_FIELD_SIZE; i++) {
+  for (var _i4 = 0; _i4 < GAME_FIELD_SIZE; _i4++) {
     GameBoard.push([]);
   }
 
-  for (var _i2 = 0; _i2 < fullList.length; _i2++) {
+  for (var _i5 = 0; _i5 < fullList.length; _i5++) {
     for (var j = 0; j < GAME_FIELD_SIZE; j++) {
-      GameBoard[_i2].push(fullList[_i2][j]);
+      GameBoard[_i5].push(fullList[_i5][j]);
 
-      updatedFullList[_i2].shift();
+      updatedFullList[_i5].shift();
     }
   }
 
@@ -377,8 +388,8 @@ function mainAction(x, y) {
   var stepX = 0;
   var stepY = 0;
 
-  for (var i = 0; i < 4; i++) {
-    switch (i) {
+  for (var _i6 = 0; _i6 < 4; _i6++) {
+    switch (_i6) {
       case 0:
         stepX = -1;
         stepY = 0;
@@ -398,11 +409,6 @@ function mainAction(x, y) {
         stepX = 0;
         stepY = -1;
         break;
-
-      case 4:
-        stepX = 0;
-        stepY = 0;
-        break;
     }
 
     var check = singleIntCheck(x, y, {
@@ -414,18 +420,65 @@ function mainAction(x, y) {
       removeItemsByCoords(getCoordsToRm(check));
     }
   }
+}
+
+function NoShiftChange(x, y) {
+  var check = singleIntCheck(x, y, {
+    y: y,
+    x: x
+  });
+
+  if (!isUndefined(check)) {
+    if (NOSHIFTcoordRM(getCoordsToRm(check))) {
+      NoShiftChange();
+    }
+  }
+}
+
+function NOSHIFTcoordRM(sideCoords) {
+  var isSomeToRM = false;
+
+  for (var side in sideCoords) {
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = sideCoords[side][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var coord = _step3.value;
+        points += 1;
+        gameBoard[coord.y][coord.x] = 0;
+        isSomeToRM = true;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+          _iterator3["return"]();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+  }
+
+  if (isSomeToRM) {
+    gravity(gameBoard, fullSeq);
+    return true;
+  }
+
+  return false;
 } // 58316
 // 74610
 
 
-var fullSeq = generateNumberSeq(58316).reverse();
-fullSeq = updateMatrix(fullSeq).updatedFullList;
-var gameBoard = updateMatrix(fullSeq).updatedGameBoard;
-
-var previos_Matrix = _toConsumableArray(gameBoard);
-
 function workWithMatrix() {
   if (points > M && name <= N) {
+    winRate[name] += 1;
     wins += 1;
     return;
   } else if (name > N) {
@@ -435,11 +488,13 @@ function workWithMatrix() {
 
   for (var y = 0; y < gameBoard.length; y++) {
     for (var x = 0; x < gameBoard[y].length; x++) {
+      NoShiftChange(x, y);
       mainAction(x, y);
     }
   }
 }
 
-workWithMatrix();
-console.log(wins);
-console.log(loses);
+workWithMatrix(); //console.log(wins)
+//console.log(loses)
+
+console.table(winRate);

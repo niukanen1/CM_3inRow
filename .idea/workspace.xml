@@ -37,7 +37,7 @@
   }
 }]]></component>
   <component name="RunManager" selected="Node.js.VerMatrix_gravity.js">
-    <configuration name="VerMatrix_gravity.js" type="NodeJSConfigurationType" application-parameters="58320 9" nameIsGenerated="true" path-to-js-file="VerMatrix_gravity.js" working-dir="$PROJECT_DIR$">
+    <configuration name="VerMatrix_gravity.js" type="NodeJSConfigurationType" application-parameters="58320 5" nameIsGenerated="true" path-to-js-file="VerMatrix_gravity.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
@@ -59,7 +59,7 @@
       <workItem from="1652101607737" duration="3790000" />
       <workItem from="1652388749040" duration="10030000" />
       <workItem from="1652777801208" duration="2799000" />
-      <workItem from="1652859535719" duration="5164000" />
+      <workItem from="1652859535719" duration="6585000" />
     </task>
     <servers />
   </component>

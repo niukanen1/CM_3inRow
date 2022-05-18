@@ -45,7 +45,7 @@ function CreateJsonFile() {
 	const dictstring = JSON.stringify(dict);
 
 	fs.writeFileSync(`matrixes/${name}.json`, dictstring);
-	name++;
+	name += 1;
 }
 
 function getMotherMatrix() {
@@ -421,6 +421,10 @@ function handleNonUserAction() {
 // 74610
 
 function workWithMatrix() {
+	handleNonUserAction();
+	if (name > 0){
+		return;
+	}
 	console.log(`Branch: ${name}`)
 	console.log(gameBoard)
 	//prompt('');

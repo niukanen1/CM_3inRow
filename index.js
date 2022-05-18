@@ -1,5 +1,5 @@
-const { execSync } = require("child_process"); 
-
+const { execSync } = require("child_process");
+const {performance} = require('perf_hooks');
 
 function runCommand(seed) {
     console.log(seed) 
@@ -24,7 +24,7 @@ function run () {
         let startTime = performance.now(); 
         runCommand(++seed)
         let endTime = performance.now(); 
-        console.log(`TIME ::: ${endTime - startTime} ms`);
+        console.log(`TIME ::: ${endTime - startTime} ms\n\n\n\n`);
         timeArr.push(endTime - startTime);
     }
     const sum = timeArr.reduce((a, b) => a+b, 0); 

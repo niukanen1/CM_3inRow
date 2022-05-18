@@ -4,6 +4,7 @@
     <list default="true" id="dd66044f-ce94-4c9c-906d-b584acfca581" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VerMatrix_gravity.js" beforeDir="false" afterPath="$PROJECT_DIR$/VerMatrix_gravity.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,16 +31,23 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/petrt/PhpstormProjects/CM_3inRow",
+    "last_opened_file_path": "C:/Users/petrt/PhpstormProjects/CM_3inRow/index.js",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="VerMatrix_gravity.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="VerMatrix_gravity.js" working-dir="$PROJECT_DIR$">
+  <component name="RunManager" selected="Node.js.VerMatrix_gravity.js">
+    <configuration name="VerMatrix_gravity.js" type="NodeJSConfigurationType" application-parameters="58320 6" nameIsGenerated="true" path-to-js-file="VerMatrix_gravity.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
+    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.VerMatrix_gravity.js" />
+      <item itemvalue="Node.js.index.js" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -52,6 +60,7 @@
       <workItem from="1652101607737" duration="3790000" />
       <workItem from="1652388749040" duration="10030000" />
       <workItem from="1652777801208" duration="2799000" />
+      <workItem from="1652859535719" duration="3541000" />
     </task>
     <servers />
   </component>

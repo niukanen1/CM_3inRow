@@ -87,12 +87,16 @@ function generateNumberSeq(seed) {
 	for (let i = 0; i < 1000; i++) {
 		// currentGenNum = (((currentGenNum / seed) * 0.99) % 32) * 5000000;
         currentGenNum = ((Math.cos(currentGenNum) - GAME_FIELD_SIZE) * 1000) / (GAME_FIELD_SIZE * 10 );
-        
+
 		let num = Number(String(currentGenNum)[5]);
-		if (num > GAME_FIELD_SIZE) {
-		    result.push(parseInt( Math.abs(num - GAME_FIELD_SIZE)));
-		} else {
-			result.push(num);
+		if (num !=  0) {
+			if (num > GAME_FIELD_SIZE) {
+				result.push(parseInt(Math.abs(num - GAME_FIELD_SIZE)));
+			} else {
+				result.push(num);
+			}
+		} else{
+			num = 1
 		}
 	}
 
@@ -312,7 +316,7 @@ function removeItemsByCoords(sideCoords) {
 		CreateJsonFile();
 
 		gravity(gameBoard, fullSeq);
-		workWithMatrix(false)
+		//workWithMatrix(false)
         workWithMatrix();
 		previos_Matrix = [...gameBoard];
 		getMotherMatrix();
@@ -405,6 +409,8 @@ function NOSHIFTcoordRM(sideCoords) {
 // 74610
 
 function workWithMatrix() {
+	console.log(gameBoard)
+
 	if (points > M && name <= N){
 		winRate[name] += 1
 		wins += 1
@@ -421,8 +427,15 @@ function workWithMatrix() {
 		}
 	}
 }
+
 workWithMatrix();
 //console.log(wins)
 //console.log(loses)
+for (let i = 0; i <= N; i++) {
+	if(winRate[i]!= 0){
+		let p = winRate[i] / wins * 100
+		winRate[i] = Math.round(p*10)/10
+}}
+
 console.table(winRate)
 

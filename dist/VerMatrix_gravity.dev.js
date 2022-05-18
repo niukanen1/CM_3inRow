@@ -9,6 +9,8 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // PARAMETERS
+var prompt = require('prompt-sync')();
+
 var GAME_FIELD_SIZE = Number(process.argv.slice(2)[1]);
 
 var _require = require('./gravity'),
@@ -45,7 +47,7 @@ function CreateJsonFile() {
   };
   var dictstring = JSON.stringify(dict);
   fs.writeFileSync("matrixes/".concat(name, ".json"), dictstring);
-  name++;
+  name += 1;
 }
 
 function getMotherMatrix() {
@@ -433,8 +435,10 @@ function NoShiftChange(x, y) {
   });
 
   if (!isUndefined(check)) {
+    var prev = _toConsumableArray(gameBoard);
+
     if (NOSHIFTcoordRM(getCoordsToRm(check))) {
-      NoShiftChange();
+      handleNonUserAction();
     }
   }
 }
@@ -489,7 +493,14 @@ function handleNonUserAction() {
 
 
 function workWithMatrix() {
-  console.log(gameBoard);
+  handleNonUserAction();
+
+  if (name > 0) {
+    return;
+  }
+
+  console.log("Branch: ".concat(name));
+  console.log(gameBoard); //prompt('');
 
   if (points > M && name <= N) {
     winRate[name] += 1;
@@ -502,7 +513,7 @@ function workWithMatrix() {
 
   for (var y = 0; y < gameBoard.length; y++) {
     for (var x = 0; x < gameBoard[y].length; x++) {
-      handleNonUserAction();
+      // handleNonUserAction();
       mainAction(x, y);
     }
   }

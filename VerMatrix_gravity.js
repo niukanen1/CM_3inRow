@@ -384,10 +384,12 @@ function mainAction(x, y) {
 } 
 
 function NoShiftChange(x, y) { 
+    
     let check = singleIntCheck(x, y, {y: y, x: x}); 
     if (!isUndefined(check)) { 
+        let prev = [...gameBoard];
         if (NOSHIFTcoordRM(getCoordsToRm(check))) {
-            NoShiftChange()
+            handleNonUserAction()
         }
     }
 }
@@ -402,6 +404,7 @@ function NOSHIFTcoordRM(sideCoords) {
             isSomeToRM = true;
 		}
 	}
+    
     if (isSomeToRM) { 
         gravity(gameBoard, fullSeq);
         return true 
@@ -410,6 +413,7 @@ function NOSHIFTcoordRM(sideCoords) {
 }
 
 function handleNonUserAction() { 
+
     for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
             NoShiftChange(x, y)
@@ -437,12 +441,14 @@ function workWithMatrix() {
 		loses += 1
 		return
 	}
+    
 	for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
-            handleNonUserAction();
+            // handleNonUserAction();
             mainAction(x, y)
 		}
 	}
+    
 }
 
 workWithMatrix();

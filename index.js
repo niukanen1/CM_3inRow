@@ -3,7 +3,7 @@ const {performance} = require('perf_hooks');
 
 function runCommand(seed) {
     console.log(seed) 
-    console.log(execSync("node ./VerMatrix_gravity.js " + seed + " 6", (error, stdout, stderr) => { 
+    console.log(execSync("node ./VerMatrix_gravity.js " + seed + " 5", (error, stdout, stderr) => { 
         if (error) { 
             console.log("error: " + error.message);
             return;
@@ -18,7 +18,7 @@ function runCommand(seed) {
 
 
 function run () { 
-    let seed = 58322
+    let seed = 58319
     const timeArr =[]
     for (let i = 0; i < 100; i++ ) { 
         let startTime = performance.now(); 

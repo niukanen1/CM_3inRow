@@ -57,6 +57,7 @@ function getMotherMatrix() {
 		//console.log(gameBoard)
 		return true;
 	} else {
+
 		return false;
 	}
 }
@@ -422,8 +423,7 @@ function handleNonUserAction() {
 function workWithMatrix() {
 	console.log(`Branch: ${name}`)
 	console.log(gameBoard)
-	prompt('' +
-		'');
+	//prompt('');
 	if (points > M && name <= N){
 		winRate[name] += 1
 		wins += 1

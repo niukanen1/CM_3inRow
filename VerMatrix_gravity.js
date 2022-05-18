@@ -322,8 +322,9 @@ function removeItemsByCoords(sideCoords) {
 		gravity(gameBoard, fullSeq);
 		//workWithMatrix(false)
         workWithMatrix();
-		previos_Matrix = [...gameBoard];
+
 		getMotherMatrix();
+		previos_Matrix = [...gameBoard];
 		
 	}
 
@@ -426,13 +427,10 @@ function handleNonUserAction() {
 
 function workWithMatrix() {
 	handleNonUserAction();
-	if (name > 0){
-		return;
-	}
-	console.log(`Branch: ${name}`)
-	console.log(gameBoard)
-	//prompt('');
-	if (points > M && name <= N){
+
+
+
+	if (points >= M && name <= N){
 		winRate[name] += 1
 		wins += 1
 		return
@@ -441,7 +439,12 @@ function workWithMatrix() {
 		loses += 1
 		return
 	}
-    
+
+	console.log(`Branch: ${name}\nPoints: ${points}`)
+	console.log(gameBoard)
+
+	prompt('');
+
 	for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
             // handleNonUserAction();

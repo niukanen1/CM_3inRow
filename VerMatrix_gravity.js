@@ -1,4 +1,7 @@
 // PARAMETERS
+const prompt = require('prompt-sync')();
+
+
 const GAME_FIELD_SIZE = Number(process.argv.slice(2)[1]);
 
 const { gravity } = require('./gravity');
@@ -417,8 +420,10 @@ function handleNonUserAction() {
 // 74610
 
 function workWithMatrix() {
+	console.log(`Branch: ${name}`)
 	console.log(gameBoard)
-
+	prompt('' +
+		'');
 	if (points > M && name <= N){
 		winRate[name] += 1
 		wins += 1

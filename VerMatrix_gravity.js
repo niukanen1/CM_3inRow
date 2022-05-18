@@ -405,6 +405,14 @@ function NOSHIFTcoordRM(sideCoords) {
     return false 
 }
 
+function handleNonUserAction() { 
+    for (let y = 0; y < gameBoard.length; y++) {
+		for (let x = 0; x < gameBoard[y].length; x++) {
+            NoShiftChange(x, y)
+        }
+    }
+}
+
 // 58316
 // 74610
 
@@ -422,7 +430,7 @@ function workWithMatrix() {
 	}
 	for (let y = 0; y < gameBoard.length; y++) {
 		for (let x = 0; x < gameBoard[y].length; x++) {
-            NoShiftChange(x, y)
+            handleNonUserAction();
             mainAction(x, y)
 		}
 	}

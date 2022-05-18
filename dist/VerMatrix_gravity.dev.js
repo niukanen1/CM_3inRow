@@ -94,10 +94,14 @@ function generateNumberSeq(seed) {
     currentGenNum = (Math.cos(currentGenNum) - GAME_FIELD_SIZE) * 1000 / (GAME_FIELD_SIZE * 10);
     var num = Number(String(currentGenNum)[5]);
 
-    if (num > GAME_FIELD_SIZE) {
-      result.push(parseInt(Math.abs(num - GAME_FIELD_SIZE)));
+    if (num != 0) {
+      if (num > GAME_FIELD_SIZE) {
+        result.push(parseInt(Math.abs(num - GAME_FIELD_SIZE)));
+      } else {
+        result.push(num);
+      }
     } else {
-      result.push(num);
+      num = 1;
     }
   } // can be changed to createVerMatrix(result) or createMatrix(result)
 
@@ -349,8 +353,8 @@ function removeItemsByCoords(sideCoords) {
 
   if (isSomethigDel) {
     CreateJsonFile();
-    gravity(gameBoard, fullSeq);
-    workWithMatrix(false);
+    gravity(gameBoard, fullSeq); //workWithMatrix(false)
+
     workWithMatrix();
     previos_Matrix = _toConsumableArray(gameBoard);
     getMotherMatrix();
@@ -472,11 +476,21 @@ function NOSHIFTcoordRM(sideCoords) {
   }
 
   return false;
+}
+
+function handleNonUserAction() {
+  for (var y = 0; y < gameBoard.length; y++) {
+    for (var x = 0; x < gameBoard[y].length; x++) {
+      NoShiftChange(x, y);
+    }
+  }
 } // 58316
 // 74610
 
 
 function workWithMatrix() {
+  console.log(gameBoard);
+
   if (points > M && name <= N) {
     winRate[name] += 1;
     wins += 1;
@@ -488,7 +502,7 @@ function workWithMatrix() {
 
   for (var y = 0; y < gameBoard.length; y++) {
     for (var x = 0; x < gameBoard[y].length; x++) {
-      NoShiftChange(x, y);
+      handleNonUserAction();
       mainAction(x, y);
     }
   }
@@ -496,5 +510,12 @@ function workWithMatrix() {
 
 workWithMatrix(); //console.log(wins)
 //console.log(loses)
+
+for (var _i7 = 0; _i7 <= N; _i7++) {
+  if (winRate[_i7] != 0) {
+    var p = winRate[_i7] / wins * 100;
+    winRate[_i7] = Math.round(p * 10) / 10;
+  }
+}
 
 console.table(winRate);

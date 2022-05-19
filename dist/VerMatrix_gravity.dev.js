@@ -9,11 +9,11 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // PARAMETERS
-var prompt = require('prompt-sync')();
+var prompt = require("prompt-sync")();
 
 var GAME_FIELD_SIZE = Number(process.argv.slice(2)[1]);
 
-var _require = require('./gravity'),
+var _require = require("./gravity"),
     gravity = _require.gravity;
 
 var N = 10;
@@ -193,7 +193,11 @@ function singleIntCheck(x, y, replaceValCoords) {
       y: y,
       x: x
     },
-    checkedValue: gameBoard[replaceValCoords.y][replaceValCoords.x],
+    // checkedValue: gameBoard[replaceValCoords.y][replaceValCoords.x],
+    checkedValue: {
+      x: replaceValCoords.x,
+      y: replaceValCoords.y
+    },
     collisions: {
       right: right,
       left: left,
@@ -206,18 +210,21 @@ function singleIntCheck(x, y, replaceValCoords) {
 
 function getCoordsToRm(checkedIntObj) {
   var coordsToRemove = {
-    right: [],
-    left: [],
-    top: [],
-    bottom: [],
-    own: []
+    sides: {
+      right: [],
+      left: [],
+      top: [],
+      bottom: [],
+      own: []
+    },
+    replaceValCoords: {
+      x: checkedIntObj.checkedValue.x,
+      y: checkedIntObj.checkedValue.y
+    }
   };
+  console.log(coordsToRemove.replaceValCoords.y + " " + coordsToRemove.replaceValCoords.x);
   var stepsHor = 0;
-  var stepsVer = 0; // console.log(`POS: y: ${checkedIntObj.coords.y}, x: ${checkedIntObj.coords.x}`)
-  // console.log("value: " + checkedIntObj.checkedValue);
-  // if (checkedIntObj.collisions.right.value || checkedIntObj.collisions.left.value || checkedIntObj.collisions.top.value || checkedIntObj.collisions.bottom.value) {
-  //     // coordsToRemove.own.push({y: checkedIntObj.coords.y, x: checkedIntObj.coords.x})
-  // }
+  var stepsVer = 0;
 
   for (var side in checkedIntObj.collisions) {
     // console.log("side : " + side);
@@ -241,28 +248,28 @@ function getCoordsToRm(checkedIntObj) {
 
         switch (side) {
           case "right":
-            coordsToRemove[side].push({
+            coordsToRemove.sides[side].push({
               y: checkedIntObj.coords.y,
               x: checkedIntObj.coords.x + step
             });
             break;
 
           case "left":
-            coordsToRemove[side].push({
+            coordsToRemove.sides[side].push({
               y: checkedIntObj.coords.y,
               x: checkedIntObj.coords.x - step
             });
             break;
 
           case "top":
-            coordsToRemove[side].push({
+            coordsToRemove.sides[side].push({
               y: checkedIntObj.coords.y - step,
               x: checkedIntObj.coords.x
             });
             break;
 
           case "bottom":
-            coordsToRemove[side].push({
+            coordsToRemove.sides[side].push({
               y: checkedIntObj.coords.y + step,
               x: checkedIntObj.coords.x
             });
@@ -286,30 +293,30 @@ function getCoordsToRm(checkedIntObj) {
   }
 
   if (stepsHor >= 2 || stepsVer >= 2) {
-    coordsToRemove.own.push({
+    coordsToRemove.sides.own.push({
       y: checkedIntObj.coords.y,
       x: checkedIntObj.coords.x
     });
   }
 
   if (stepsHor >= 2 && stepsVer < 2) {
-    coordsToRemove.bottom = [];
-    coordsToRemove.top = [];
+    coordsToRemove.sides.bottom = [];
+    coordsToRemove.sides.top = [];
   }
 
   if (stepsVer >= 2 && stepsHor < 2) {
-    coordsToRemove.left = [];
-    coordsToRemove.right = [];
+    coordsToRemove.sides.left = [];
+    coordsToRemove.sides.right = [];
   }
 
   if (stepsVer < 2) {
-    coordsToRemove.top = [];
-    coordsToRemove.bottom = [];
+    coordsToRemove.sides.top = [];
+    coordsToRemove.sides.bottom = [];
   }
 
   if (stepsHor < 2) {
-    coordsToRemove.left = [];
-    coordsToRemove.right = [];
+    coordsToRemove.sides.left = [];
+    coordsToRemove.sides.right = [];
   } // console.log("\n============")
   // console.log(checkedIntObj.coords)
   // console.log("Value: " + checkedIntObj.checkedValue)
@@ -325,15 +332,16 @@ function getCoordsToRm(checkedIntObj) {
 function removeItemsByCoords(sideCoords) {
   var isSomethigDel = false;
 
-  for (var side in sideCoords) {
+  for (var side in sideCoords.sides) {
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
 
     try {
-      for (var _iterator2 = sideCoords[side][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      for (var _iterator2 = sideCoords.sides[side][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         var coord = _step2.value;
         points += 1;
+        gameBoard[sideCoords.replaceValCoords.y][sideCoords.replaceValCoords.x] = gameBoard[coord.y][coord.x];
         gameBoard[coord.y][coord.x] = 0;
         isSomethigDel = true;
       }
@@ -358,8 +366,8 @@ function removeItemsByCoords(sideCoords) {
     gravity(gameBoard, fullSeq); //workWithMatrix(false)
 
     workWithMatrix();
-    previos_Matrix = _toConsumableArray(gameBoard);
     getMotherMatrix();
+    previos_Matrix = _toConsumableArray(gameBoard);
   }
 }
 
@@ -446,13 +454,13 @@ function NoShiftChange(x, y) {
 function NOSHIFTcoordRM(sideCoords) {
   var isSomeToRM = false;
 
-  for (var side in sideCoords) {
+  for (var side in sideCoords.sides) {
     var _iteratorNormalCompletion3 = true;
     var _didIteratorError3 = false;
     var _iteratorError3 = undefined;
 
     try {
-      for (var _iterator3 = sideCoords[side][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      for (var _iterator3 = sideCoords.sides[side][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
         var coord = _step3.value;
         points += 1;
         gameBoard[coord.y][coord.x] = 0;
@@ -495,14 +503,7 @@ function handleNonUserAction() {
 function workWithMatrix() {
   handleNonUserAction();
 
-  if (name > 0) {
-    return;
-  }
-
-  console.log("Branch: ".concat(name));
-  console.log(gameBoard); //prompt('');
-
-  if (points > M && name <= N) {
+  if (points >= M && name <= N) {
     winRate[name] += 1;
     wins += 1;
     return;
@@ -510,6 +511,10 @@ function workWithMatrix() {
     loses += 1;
     return;
   }
+
+  console.log("Branch: ".concat(name, "\nPoints: ").concat(points));
+  console.log(gameBoard);
+  prompt("");
 
   for (var y = 0; y < gameBoard.length; y++) {
     for (var x = 0; x < gameBoard[y].length; x++) {
